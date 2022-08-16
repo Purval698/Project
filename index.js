@@ -1,35 +1,25 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 8080
 
-app.get('/age/query', (req, res) => {
-  // console.log(req.query.year);
-  yy = req.query.year         // taking year from query
-  mm = req.query.month        // taking month from query
-  dd = req.query.day          // taking day from query
-  user = req.query.name       // taking name from query
+app.get('/metrics', (req, res) => {
+    let radius = req.query.radius;
+    if (req.query.obj === 'circle' && req.query.metric === 'area') {
+        let Area = Math.PI * radius ** 2;
+        console.log(Area);
+        res.status(200).json(` Your Area of Circle is ${Area} units`);
 
-  if (yy && mm && dd && user) {
-    birthDate = `${yy}-${mm}-${dd}`
-    DATE = new Date(birthDate).getTime()                    // converting string date to milliseconds
-    console.log(DATE)
-    var today = new Date().getTime();                       // Todays date
-    console.log(today)
+    };
+    if (req.query.obj === 'sphere' && req.query.metric === 'volume') {
+        let Volume = (4 / 3) * Math.PI * radius ** 3;
+        res.status(200).json(` Your Volume of Sphere is ${Volume} units`);
 
-    ageDiff = today - DATE                                  // Calculated difference between birthdate and today date in milliseconds
-    YEAR = ageDiff / (1000 * 3600 * 24 * 365);                // Converting milliseconds to year
-    AGE = Math.floor(YEAR);
-    console.log(AGE, " The Diff is ")
-    res.status(200).json(`Hello ${user}, You are currently ${AGE} old`);
-  }
-  else {
-    res.status(400).json(`Please Enter the all required values`);
-
-  }
-
-
+    }
+    else {
+        res.status(400).json(`Please Enter the all required values`);
+    }
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+    console.log(`Example app listening on port ${port}`)
 });
